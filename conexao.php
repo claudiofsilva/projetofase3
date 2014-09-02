@@ -5,30 +5,25 @@ class Conexao{
     private $db;
     private $busca;
     private $idPagina;
-
-    /**
-     * @param mixed $idPagina
-     */
-    public function setIdPagina($idPagina)
+	private $banco;
+	private $table;
+	
+    public function __construct($banco,$table)
     {
-        $this->idPagina = $idPagina;
-        return $this;
-    }
-
-    function getIdPagina()
-    {
-        return $this->idPagina;
-    }
-
-    public function __construct(\PDO $db)
-    {
-        $this->db = $db;
+        try{
+			$this->banco = $banco;
+			$this->table = $table;
+			$conexao = new \PDO("mysql:host=localhost;dbname=".$this->banco.";","root","");
+			$this->db = $conexao;
+		}
+		catch(\PDOException $e){
+			die('Não foi posssivel conectar ao banco de dados, código de erro: '.$e->getCode().' , mensagem de erro: '.$e->getMessage());
+		}
     }
 
     public function buscar()
     {
-
-        $query = "SELECT * FROM paginas WHERE nome LIKE '%{$this->getBusca()}%'";
+        $query = "SELECT * FROM {$this->table} WHERE nome LIKE '%{$this->getBusca()}%'";
         $stmt = $this->db->query($query);
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
@@ -36,14 +31,12 @@ class Conexao{
 
     public function exibePagina()
     {
-        $query = "SELECT * FROM paginas WHERE id = :id";
+        $query = "SELECT * FROM {$this->table} WHERE id = :id";
         $stmt = $this->db->prepare($query);
         $stmt->bindValue(":id",$this->getIdPagina());
         $stmt->execute();
         return $stmt->fetch(\PDO::FETCH_ASSOC);
     }
-
-
 
     public function setBusca($busca)
     {
@@ -55,6 +48,17 @@ class Conexao{
     public function getBusca()
     {
         return $this->busca;
+    }
+	
+	public function setIdPagina($idPagina)
+    {
+        $this->idPagina = $idPagina;
+        return $this;
+    }
+
+    function getIdPagina()
+    {
+        return $this->idPagina;
     }
 
 }

@@ -27,16 +27,9 @@ if($path){
             <h3 class="text-muted">Projeto fase 3</h3>
             <?php
                 require_once 'conexao.php';
-                try{
-                    $conexao = new \PDO("mysql:host=localhost;dbname=curso;","root","root");
-                    $db = new Conexao($conexao);
-
-                }
-                catch(\PDOException $e){
-                    die('Não foi possivel conectar ao banco de dados, código de erro: '.$e->getCode()." , Mensagem de erro: ".$e->getMessage());
-                }
+                $db = new Conexao('curso','paginas');
                 if($_POST){
-
+				
                     $db->setBusca($_POST['nomePagina']);
 
                     if($db->buscar()){
