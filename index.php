@@ -1,36 +1,14 @@
 <?php
 
-//Valida rota
-function rotas($parametro){
-    //Se não foi passado parametro chama arquivo home.php
-    if(!$parametro){
-        return 'home.php';
-    }else{
-        //rotas validas
-        $rotasValidas = array('empresa','contato','produtos','home','servicos');
-
-        //Verifica se o parametro é uma rota valida
-        if(in_array($parametro,$rotasValidas)){
-            return  $parametro.'.php';
-        }else{
-            return 'erro.php';
-        }
-
-    }
-}
-
 //Pega request
 $rota = parse_url('http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
 
 //formata o path
 $path= preg_replace('(^/)','',$rota['path']);
 
-//Verifica se existe erro e retorna STATUS CODE 404
-if(rotas($path) == 'erro.php'){
+if($path){
     http_response_code(404);
 }
-
-
 ?>
 <!DOCTYPE html>
 <html>
@@ -48,8 +26,49 @@ if(rotas($path) == 'erro.php'){
         <div class="container">
             <h3 class="text-muted">Projeto fase 3</h3>
             <?php
-                if($_POST['nomePagina']){
-                    echo $_POST['nomePagina'];
+                require_once 'conexao.php';
+                try{
+                    $conexao = new \PDO("mysql:host=localhost;dbname=curso;","root","root");
+                    $db = new Conexao($conexao);
+
+                }
+                catch(\PDOException $e){
+                    die('Não foi possivel conectar ao banco de dados, código de erro: '.$e->getCode()." , Mensagem de erro: ".$e->getMessage());
+                }
+                if($_POST){
+
+                    $db->setBusca($_POST['nomePagina']);
+
+                    if($db->buscar()){
+                        foreach($db->buscar() as $busca){
+                            echo "<a href=?pagina=".$busca['id'].">".$busca['nome']."</a><br>";
+                        }
+                    }else{
+                        echo  '<div class="jumbotron">
+                            <h1>Busca não encontrada</h1>
+                            <p class="lead">Busca não encontrada</p>
+                            <p><a class="btn btn-lg btn-success" href="/" role="button">Voltar</a></p>
+                        </div>';
+                    }
+
+                }elseif($_GET){
+                    $db->setIdPagina($_GET['pagina']);
+                    $pagina = $db->exibePagina();
+                    if($pagina){
+                      echo  '<div class="jumbotron">
+                            <h1>'.$pagina["nome"].'</h1>
+                            <p class="lead">'.$pagina['descricao'].'</p>
+                            <p><a class="btn btn-lg btn-success" href="/" role="button">Voltar</a></p>
+                        </div>';
+                    }else{
+                        echo  '<div class="jumbotron">
+                            <h1>Erro</h1>
+                            <p class="lead">Pagina não encontrada</p>
+                            <p><a class="btn btn-lg btn-success" href="/" role="button">Voltar</a></p>
+                        </div>';
+                    }
+
+
                 }else{
             ?>
 
