@@ -42,8 +42,8 @@ class Pagina {
     {
         return $this->busca;
     }
-
-    public function setIdPagina($idPagina)
+	
+	public function setIdPagina($idPagina)
     {
         $this->idPagina = $idPagina;
         return $this;
@@ -53,7 +53,6 @@ class Pagina {
     {
         return $this->idPagina;
     }
-
 }
 
 

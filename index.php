@@ -26,6 +26,7 @@ if($path){
         <div class="container">
             <h3 class="text-muted">Projeto fase 3</h3>
             <?php
+
                 require_once 'pagina.php';
                 $pagina = new Pagina();
             
