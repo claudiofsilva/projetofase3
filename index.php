@@ -26,21 +26,15 @@ if($path){
         <div class="container">
             <h3 class="text-muted">Projeto fase 3</h3>
             <?php
-                require_once 'conexao.php';
-                try{
-                    $conexao = new \PDO("mysql:host=localhost;dbname=curso;","root","root");
-                    $db = new Conexao($conexao);
-
-                }
-                catch(\PDOException $e){
-                    die('Não foi possivel conectar ao banco de dados, código de erro: '.$e->getCode()." , Mensagem de erro: ".$e->getMessage());
-                }
+                require_once 'pagina.php';
+                $pagina = new Pagina();
+            
                 if($_POST){
 
-                    $db->setBusca($_POST['nomePagina']);
+                    $pagina->setBusca($_POST['nomePagina']);
 
-                    if($db->buscar()){
-                        foreach($db->buscar() as $busca){
+                    if($pagina->buscar()){
+                        foreach($pagina->buscar() as $busca){
                             echo "<a href=?pagina=".$busca['id'].">".$busca['nome']."</a><br>";
                         }
                     }else{
@@ -52,8 +46,8 @@ if($path){
                     }
 
                 }elseif($_GET){
-                    $db->setIdPagina($_GET['pagina']);
-                    $pagina = $db->exibePagina();
+                    $pagina->setIdPagina($_GET['pagina']);
+                    $pagina = $pagina->exibePagina();
                     if($pagina){
                       echo  '<div class="jumbotron">
                             <h1>'.$pagina["nome"].'</h1>
