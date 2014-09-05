@@ -5,7 +5,7 @@ require_once "conexao.php";
 class Pagina {
 
     private $busca;
-    private $idPagina;
+    private $nomePagina ;
     private $db;
 
    public function __construct()
@@ -17,17 +17,17 @@ class Pagina {
    public function buscar()
    {
 
-       $query = "SELECT * FROM paginas WHERE nome LIKE '%{$this->getBusca()}%'";
+       $query = "SELECT * FROM paginas WHERE descricao LIKE '%{$this->getBusca()}%'";
        $stmt = $this->db->query($query);
        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
    }
 
-    public function exibePagina()
+    public function exibeConteudo()
     {
-        $query = "SELECT * FROM paginas WHERE id = :id";
+        $query = "SELECT * FROM paginas WHERE nome = :nome";
         $stmt = $this->db->prepare($query);
-        $stmt->bindValue(":id",$this->getIdPagina());
+        $stmt->bindValue(":nome",$this->getNomePagina());
         $stmt->execute();
         return $stmt->fetch(\PDO::FETCH_ASSOC);
     }
@@ -43,15 +43,15 @@ class Pagina {
         return $this->busca;
     }
 	
-	public function setIdPagina($idPagina)
+	public function setNomePagina($nomePagina)
     {
-        $this->idPagina = $idPagina;
+        $this->nomePagina = $nomePagina;
         return $this;
     }
 
-    function getIdPagina()
+    function getNomePagina()
     {
-        return $this->idPagina;
+        return $this->nomePagina;
     }
 }
 

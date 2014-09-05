@@ -3,12 +3,12 @@
 //Pega request
 $rota = parse_url('http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
 
-//formata o path
-$path= preg_replace('(^/)','',$rota['path']);
+$filename = $rota['path'];
 
-if($path){
-    http_response_code(404);
+if(!file_exists($filename)){
+  header('location:/erro.php');
 }
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -25,6 +25,7 @@ if($path){
 
         <div class="container">
             <h3 class="text-muted">Projeto fase 3</h3>
+            <?php require_once 'menu.php' ?>
             <?php
 
                 require_once 'pagina.php';
@@ -32,46 +33,22 @@ if($path){
             
                 if($_POST){
 
-                    $pagina->setBusca($_POST['nomePagina']);
+                    $pagina->setBusca($_POST['palavraChave']);
 
                     if($pagina->buscar()){
                         foreach($pagina->buscar() as $busca){
-                            echo "<a href=?pagina=".$busca['id'].">".$busca['nome']."</a><br>";
+                            echo "<a href=".$busca['nome'].".php>".$busca['descricao']."</a><br>";
                         }
-                    }else{
-                        echo  '<div class="jumbotron">
-                            <h1>Busca não encontrada</h1>
-                            <p class="lead">Busca não encontrada</p>
-                            <p><a class="btn btn-lg btn-success" href="/" role="button">Voltar</a></p>
-                        </div>';
                     }
 
-                }elseif($_GET){
-                    $pagina->setIdPagina($_GET['pagina']);
-                    $pagina = $pagina->exibePagina();
-                    if($pagina){
-                      echo  '<div class="jumbotron">
-                            <h1>'.$pagina["nome"].'</h1>
-                            <p class="lead">'.$pagina['descricao'].'</p>
-                            <p><a class="btn btn-lg btn-success" href="/" role="button">Voltar</a></p>
-                        </div>';
-                    }else{
-                        echo  '<div class="jumbotron">
-                            <h1>Erro</h1>
-                            <p class="lead">Pagina não encontrada</p>
-                            <p><a class="btn btn-lg btn-success" href="/" role="button">Voltar</a></p>
-                        </div>';
-                    }
-
-
-                }else{
+                } else {
             ?>
 
             <form class="form-horizontal" role="form" method="post" action="">
                 <div class="form-group">
-                    <label for="inputEmail2" class="col-sm-2 control-label">Busca Pagina</label>
+                    <label for="inputEmail2" class="col-sm-2 control-label">Buscar Palavra Chave</label>
                     <div class="col-sm-10">
-                        <input type="name" class="form-control" id="inputEmail4" placeholder="Nome Pagina" name="nomePagina">
+                        <input type="name" class="form-control" id="inputEmail4" placeholder="Palavra chave" name="palavraChave">
                     </div>
                 </div>
                 <div class="form-group">
@@ -82,6 +59,7 @@ if($path){
             </form>
 
             <?php } ?>
+
             <?php require_once 'footer.php';?>
 
         </div>
