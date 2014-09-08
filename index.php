@@ -1,12 +1,32 @@
 <?php
+//Valida rota
+function rotas($parametro){
+    //Se não foi passado parametro chama arquivo home.php
+    if(!$parametro){
+        return 'home.php';
+    }else{
+        //rotas validas
+        $rotasValidas = array('empresa','contato','produtos','home','servicos');
+
+        //Verifica se o parametro é uma rota valida
+        if(in_array($parametro,$rotasValidas)){
+            return  $parametro.'.php';
+        }else{
+            return 'erro.php';
+        }
+
+    }
+}
 
 //Pega request
 $rota = parse_url('http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
 
-$filename = $rota['path'];
+//formata o path
+$path= preg_replace('(^/)','',$rota['path']);
 
-if(!file_exists($filename)){
-  header('location:/erro.php');
+//Verifica se existe erro e retorna STATUS CODE 404
+if(rotas($path) == 'erro.php'){
+    header('location:/erro.php');
 }
 
 ?>
@@ -26,8 +46,7 @@ if(!file_exists($filename)){
         <div class="container">
             <h3 class="text-muted">Projeto fase 3</h3>
             <?php require_once 'menu.php' ?>
-            <?php
-
+            <?php				
                 require_once 'pagina.php';
                 $pagina = new Pagina();
             
@@ -37,11 +56,13 @@ if(!file_exists($filename)){
 
                     if($pagina->buscar()){
                         foreach($pagina->buscar() as $busca){
-                            echo "<a href=".$busca['nome'].".php>".$busca['descricao']."</a><br>";
+                            echo "<a href=".$busca['nome'].">".$busca['descricao']."</a><br>";
                         }
                     }
 
-                } else {
+                }elseif($path){				
+					require_once (rotas($path));
+				} else {
             ?>
 
             <form class="form-horizontal" role="form" method="post" action="">
