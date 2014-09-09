@@ -1,14 +1,14 @@
 <?php
 //Valida rota
 function rotas($parametro){
-    //Se não foi passado parametro chama arquivo home.php
+    //Se nï¿½o foi passado parametro chama arquivo home.php
     if(!$parametro){
         return 'home.php';
     }else{
         //rotas validas
         $rotasValidas = array('empresa','contato','produtos','home','servicos');
 
-        //Verifica se o parametro é uma rota valida
+        //Verifica se o parametro ï¿½ uma rota valida
         if(in_array($parametro,$rotasValidas)){
             return  $parametro.'.php';
         }else{
@@ -50,7 +50,7 @@ if(rotas($path) == 'erro.php'){
                 require_once 'pagina.php';
                 $pagina = new Pagina();
             
-                if($_POST){
+                if($_POST['palavraChave']){
 
                     $pagina->setBusca($_POST['palavraChave']);
 

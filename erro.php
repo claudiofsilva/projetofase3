@@ -1,5 +1,5 @@
 <?php
-    http_response_code(404);
+http_response_code(404);
 ?>
 <!DOCTYPE html>
 <html>
@@ -17,15 +17,13 @@
 <div class="container">
     <h3 class="text-muted">Projeto fase 3</h3>
     <?php require_once 'menu.php' ?>
-<div class="jumbotron">
-    <h1>Erro 404</h1>
-    <p class="lead">A pagina que voce tentou acessar nao existe</p>
-    <p><a class="btn btn-lg btn-success" href="#" role="button">Erro 404</a></p>
+    <div class="jumbotron">
+        <h1>Erro 404</h1>
+        <p class="lead">A pagina que voce tentou acessar nao existe</p>
+        <p><a class="btn btn-lg btn-success" href="#" role="button">Erro 404</a></p>
+    </div>
+    <?php require_once 'footer.php';?>
 </div>
-<?php require_once 'footer.php';?>
-</div>
-
-
 
 </body>
 </html>
